@@ -9,20 +9,20 @@ const ranks = [
     id: "helper",
     name: "Helper",
     color: "#4ade80",
-    perms: ["Basic moderation tools", "/tp", "/report", "/helpop"],
-    reqs: "New staff member. Learn server rules and handle basic tickets.",
+    perms: [
+      "/tempmute [user] duration reason",
+      "Discord: ?timeout user_id duration reason",
+    ],
+    reqs: "New staff member. Responsible for moderating in-game chat and assisting moderators with reports.",
   },
   {
     id: "mod",
     name: "Mod",
     color: "#60a5fa",
     perms: [
-      "/mute",
-      "/unmute",
-      "/kick",
-      "/warn",
-      "/history",
-      "Chat moderation",
+      "/ban playername duration reason",
+      "Discord: ?ban playername duration reason",
+      "Inherits all Helper commands",
     ],
     reqs: "Proven track record as Helper. Minimum 2 weeks service.",
   },
@@ -31,43 +31,25 @@ const ranks = [
     name: "Senior Mod",
     color: "#c084fc",
     perms: [
-      "/tempban",
-      "/unban",
-      "/freeze",
-      "/screenshare",
-      "/clearchat",
-      "Ticket oversight",
+      "/Axir view [playername]",
+      "Inherits all Helper commands",
+      "Inherits all Mod commands",
     ],
-    reqs: "Minimum 1 month as Mod. Active mentor to Helpers.",
+    reqs: "Minimum 1 month as Mod. Mentors staff and assists admins in managing moderation.",
   },
   {
     id: "admin",
     name: "Admin",
     color: "#e53935",
     perms: [
-      "/ban",
-      "/ipban",
-      "/invsee",
-      "/give",
-      "Handle appeals",
-      "Manage staff roster",
+      "/gmc",
+      "/gmsp",
+      "/gms",
+      "Inherits all Helper commands",
+      "Inherits all Mod commands",
+      "Inherits all Sr.Mod commands",
     ],
-    reqs: "Minimum 2 months as Senior Mod. Full appeal authority.",
-  },
-  {
-    id: "senioradmin",
-    name: "Senior Admin",
-    color: "#f5c518",
-    perms: [
-      "/promote",
-      "/demote",
-      "/op",
-      "/deop",
-      "/wipe",
-      "Staff evaluations",
-      "Final decisions",
-    ],
-    reqs: "Minimum 3 months as Admin. Leadership and staff management role.",
+    reqs: "Minimum 2 months as Senior Mod. Focuses on server administration and assisting players.",
   },
 ];
 
@@ -93,17 +75,10 @@ const timelines = [
     fromColor: "#c084fc",
     toColor: "#e53935",
   },
-  {
-    from: "Admin",
-    to: "Senior Admin",
-    time: "3 Months",
-    fromColor: "#e53935",
-    toColor: "#f5c518",
-  },
 ];
 
 // Roman numeral rank level indicators
-const rankRomans = ["I", "II", "III", "IV", "V"];
+const rankRomans = ["I", "II", "III", "IV"];
 
 export default function PromotionSystem({ searchQuery }: Props) {
   const filteredRanks = ranks.filter(
@@ -251,7 +226,7 @@ export default function PromotionSystem({ searchQuery }: Props) {
                     style={{ background: rank.color }}
                   />
                   <span
-                    className="text-xs"
+                    className="text-xs font-mono"
                     style={{ color: "rgba(255,255,255,0.65)" }}
                   >
                     {perm}

@@ -24,11 +24,29 @@ export type PageId =
   | "ticket-handling"
   | "senior-staff-guide";
 
+const LOGO_STORAGE_KEY = "razemc_custom_logo";
+
 export default function App() {
   const [activePage, setActivePage] = useState<PageId>("introduction");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [customLogo, setCustomLogo] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(LOGO_STORAGE_KEY);
+    } catch {
+      return null;
+    }
+  });
+
+  const handleLogoUpload = (src: string) => {
+    setCustomLogo(src);
+    try {
+      localStorage.setItem(LOGO_STORAGE_KEY, src);
+    } catch {
+      // storage quota exceeded — still use in memory
+    }
+  };
 
   const handleScroll = useCallback(() => {
     const el = document.getElementById("main-content");
@@ -104,6 +122,8 @@ export default function App() {
         onSearchChange={setSearchQuery}
         onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
         sidebarOpen={sidebarOpen}
+        logoSrc={customLogo}
+        onLogoUpload={handleLogoUpload}
       />
 
       <div className="flex flex-1 overflow-hidden">

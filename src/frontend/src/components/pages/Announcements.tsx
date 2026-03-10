@@ -9,7 +9,7 @@ const announcements = [
     id: 1,
     date: "March 8, 2026",
     title: "New Punishment Guidelines Update",
-    author: "ShadowAdmin",
+    author: "RIO",
     authorRank: "Senior Admin",
     content:
       "Effective immediately, all Mod+ staff are required to screenshare suspected hackers before issuing a ban. The evidence must include at minimum a 30-second recording showing the violation. Please review the updated Punishment Guide section for full details.",
@@ -19,7 +19,7 @@ const announcements = [
     id: 2,
     date: "March 1, 2026",
     title: "Staff Meeting — Saturday March 7th",
-    author: "VoidDirector",
+    author: "Roni",
     authorRank: "Senior Admin",
     content:
       "All staff are required to attend the monthly meeting this Saturday at 6PM EST in the Staff Voice channel. Agenda includes: Performance reviews, Q2 planning, and new ticket system rollout. Submit questions beforehand in #staff-chat.",
@@ -29,7 +29,7 @@ const announcements = [
     id: 3,
     date: "February 22, 2026",
     title: "Inactivity Notice Policy Reminder",
-    author: "CrimsonMod",
+    author: "RIO",
     authorRank: "Admin",
     content:
       "Reminder that all inactivity notices must be posted in #inactivity-notice at least 24 hours in advance. Notices submitted after the fact will not be accepted. Two consecutive weeks of unexcused absence will result in automatic demotion.",

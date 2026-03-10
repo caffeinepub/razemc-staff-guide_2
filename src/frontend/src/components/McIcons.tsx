@@ -16,6 +16,7 @@ const base = (size: number): React.SVGProps<SVGSVGElement> => ({
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
   "aria-hidden": "true" as const,
+  role: "presentation",
   focusable: "false" as const,
 });
 
