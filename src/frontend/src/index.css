@@ -1,0 +1,286 @@
+@font-face {
+  font-family: "Outfit";
+  src: url("/assets/fonts/Outfit.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/PlusJakartaSans.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/JetBrainsMono.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0.08 0.008 270;
+    --foreground: 0.95 0.01 270;
+    --card: 0.11 0.01 270;
+    --card-foreground: 0.95 0.01 270;
+    --popover: 0.11 0.01 270;
+    --popover-foreground: 0.95 0.01 270;
+    --primary: 0.52 0.22 25;
+    --primary-foreground: 0.98 0.005 270;
+    --secondary: 0.78 0.15 75;
+    --secondary-foreground: 0.1 0.01 270;
+    --muted: 0.15 0.012 270;
+    --muted-foreground: 0.55 0.01 270;
+    --accent: 0.58 0.24 25;
+    --accent-foreground: 0.98 0.005 270;
+    --destructive: 0.52 0.22 25;
+    --destructive-foreground: 0.98 0.005 270;
+    --border: 0.18 0.01 270;
+    --input: 0.15 0.012 270;
+    --ring: 0.52 0.22 25;
+    --radius: 0.5rem;
+    --chart-1: 0.52 0.22 25;
+    --chart-2: 0.78 0.15 75;
+    --chart-3: 0.55 0.18 220;
+    --chart-4: 0.65 0.2 150;
+    --chart-5: 0.7 0.15 300;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background-color: #0b0b10;
+    color: #f0f0f8;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Outfit", sans-serif;
+  }
+
+  code,
+  pre,
+  .font-mono {
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0b0b10;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #e5393530;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e53935;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(20, 20, 28, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(229, 57, 53, 0.12);
+  }
+
+  .glass-card {
+    background: rgba(20, 20, 28, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(229, 57, 53, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(229, 57, 53, 0.3);
+    box-shadow: 0 8px 32px rgba(229, 57, 53, 0.15), 0 0 0 1px
+      rgba(229, 57, 53, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px rgba(229, 57, 53, 0.4), 0 0 60px rgba(229, 57, 53, 0.1);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(245, 197, 24, 0.4), 0 0 60px
+      rgba(245, 197, 24, 0.1);
+  }
+
+  .text-glow-red {
+    text-shadow: 0 0 20px rgba(229, 57, 53, 0.7);
+  }
+
+  .neon-border-red {
+    border: 1px solid rgba(229, 57, 53, 0.5);
+    box-shadow: 0 0 10px rgba(229, 57, 53, 0.2), inset 0 0 10px
+      rgba(229, 57, 53, 0.05);
+  }
+
+  .active-nav-item {
+    background: rgba(229, 57, 53, 0.1);
+    border-left: 3px solid #e53935;
+    color: #e53935;
+  }
+
+  .nav-item {
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .nav-item:hover {
+    background: rgba(229, 57, 53, 0.06);
+    border-left-color: rgba(229, 57, 53, 0.4);
+    color: #ff6b6b;
+  }
+
+  .rank-helper {
+    color: #4ade80;
+  }
+  .rank-mod {
+    color: #60a5fa;
+  }
+  .rank-seniormod {
+    color: #c084fc;
+  }
+  .rank-admin {
+    color: #e53935;
+  }
+  .rank-senioradmin {
+    color: #f5c518;
+  }
+
+  .bg-rank-helper {
+    background: rgba(74, 222, 128, 0.15);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+  }
+  .bg-rank-mod {
+    background: rgba(96, 165, 250, 0.15);
+    border: 1px solid rgba(96, 165, 250, 0.3);
+  }
+  .bg-rank-seniormod {
+    background: rgba(192, 132, 252, 0.15);
+    border: 1px solid rgba(192, 132, 252, 0.3);
+  }
+  .bg-rank-admin {
+    background: rgba(229, 57, 53, 0.15);
+    border: 1px solid rgba(229, 57, 53, 0.3);
+  }
+  .bg-rank-senioradmin {
+    background: rgba(245, 197, 24, 0.15);
+    border: 1px solid rgba(245, 197, 24, 0.3);
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(229, 57, 53, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(229, 57, 53, 0.6), 0 0 80px
+        rgba(229, 57, 53, 0.2);
+    }
+  }
+
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes particle-float {
+    0% {
+      transform: translateY(100vh) translateX(0px);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.6;
+    }
+    90% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateY(-20px) translateX(20px);
+      opacity: 0;
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  .animate-gradient {
+    animation: gradient-shift 6s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  .hero-gradient {
+    background: linear-gradient(
+      135deg,
+      #0b0b10 0%,
+      #1a0a0a 30%,
+      #0f0d1a 60%,
+      #0b0b10 100%
+    );
+  }
+
+  .search-highlight {
+    background: rgba(245, 197, 24, 0.3);
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+}
+
+/* Minecraft-themed icon hover glow effect */
+.mc-icon-box:hover {
+  box-shadow: 0 0 12px currentColor, 0 0 20px rgba(255, 255, 255, 0.05);
+  transform: scale(1.08);
+}
+
+.mc-icon-wrap:hover {
+  filter: drop-shadow(0 0 5px currentColor) !important;
+}
