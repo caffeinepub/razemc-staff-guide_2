@@ -1,3 +1,5 @@
+import { Upload } from "lucide-react";
+import { useRef } from "react";
 import type { PageId } from "../../App";
 import {
   AlertIcon,
@@ -14,6 +16,8 @@ import {
 interface Props {
   navigate: (page: PageId) => void;
   searchQuery: string;
+  logoSrc: string | null;
+  onLogoUpload: (src: string) => void;
 }
 
 const quickCards = [
@@ -88,7 +92,28 @@ const statsData = [
   },
 ];
 
-export default function Introduction({ navigate }: Props) {
+const defaultLogo =
+  "/assets/uploads/ChatGPT-Image-Mar-10-2026-12_18_46-AM-1-1.png";
+
+export default function Introduction({
+  navigate,
+  logoSrc,
+  onLogoUpload,
+}: Props) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const result = ev.target?.result as string;
+      if (result) onLogoUpload(result);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
   return (
     <div className="space-y-8">
       <div
@@ -125,33 +150,69 @@ export default function Introduction({ navigate }: Props) {
           }}
         />
         <div className="relative z-10 text-center py-12 px-6">
-          <div
-            className="inline-block mb-4 p-1 rounded-2xl animate-pulse-glow"
-            style={{
-              background: "rgba(229, 57, 53, 0.1)",
-              border: "1px solid rgba(229, 57, 53, 0.3)",
-            }}
-          >
-            <img
-              src="/assets/uploads/ChatGPT-Image-Mar-10-2026-12_18_46-AM-1.png"
-              alt="RazeMC Logo"
-              className="w-20 h-20 object-contain animate-float"
-              onError={(e) => {
-                const img = e.currentTarget as HTMLImageElement;
-                img.style.display = "none";
-                const parent = img.parentElement;
-                if (parent) {
-                  parent.style.width = "80px";
-                  parent.style.height = "80px";
-                  parent.style.display = "flex";
-                  parent.style.alignItems = "center";
-                  parent.style.justifyContent = "center";
-                  parent.innerHTML =
-                    '<span style="color:#e53935;font-weight:900;font-size:36px;font-family:Outfit,sans-serif">R</span>';
-                }
+          {/* Big logo with upload on hover */}
+          <div className="inline-block mb-4 relative group">
+            <div
+              className="p-1 rounded-2xl animate-pulse-glow"
+              style={{
+                background: "rgba(229, 57, 53, 0.1)",
+                border: "1px solid rgba(229, 57, 53, 0.3)",
               }}
+            >
+              <img
+                src={logoSrc || defaultLogo}
+                alt="RazeMC Logo"
+                className="w-20 h-20 object-contain animate-float"
+                onError={(e) => {
+                  const img = e.currentTarget as HTMLImageElement;
+                  img.style.display = "none";
+                  const parent = img.parentElement;
+                  if (parent) {
+                    parent.style.width = "80px";
+                    parent.style.height = "80px";
+                    parent.style.display = "flex";
+                    parent.style.alignItems = "center";
+                    parent.style.justifyContent = "center";
+                    parent.innerHTML =
+                      '<span style="color:#e53935;font-weight:900;font-size:36px;font-family:Outfit,sans-serif">R</span>';
+                  }
+                }}
+              />
+            </div>
+            {/* Upload overlay on hover */}
+            <button
+              type="button"
+              data-ocid="welcome.logo.upload_button"
+              title="Upload custom logo"
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute inset-0 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              style={{
+                background: "rgba(11,11,16,0.75)",
+                border: "1px solid rgba(229,57,53,0.6)",
+              }}
+            >
+              <div className="flex flex-col items-center gap-1">
+                <Upload size={18} color="#e53935" />
+                <span
+                  style={{
+                    color: "#e53935",
+                    fontSize: "10px",
+                    fontWeight: 600,
+                  }}
+                >
+                  Upload
+                </span>
+              </div>
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
             />
           </div>
+
           <h1
             className="text-3xl sm:text-4xl font-bold font-outfit mb-3"
             style={{

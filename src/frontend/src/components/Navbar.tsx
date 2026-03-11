@@ -34,7 +34,7 @@ export default function Navbar({
   };
 
   const defaultLogo =
-    "/assets/uploads/ChatGPT-Image-Mar-10-2026-12_18_46-AM-1.png";
+    "/assets/uploads/ChatGPT-Image-Mar-10-2026-12_18_46-AM-1-1.png";
 
   return (
     <header

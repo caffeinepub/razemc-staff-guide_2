@@ -79,7 +79,14 @@ export default function App() {
   const renderPage = () => {
     switch (activePage) {
       case "introduction":
-        return <Introduction navigate={navigate} searchQuery={searchQuery} />;
+        return (
+          <Introduction
+            navigate={navigate}
+            searchQuery={searchQuery}
+            logoSrc={customLogo}
+            onLogoUpload={handleLogoUpload}
+          />
+        );
       case "staff-rules":
         return <StaffRules searchQuery={searchQuery} />;
       case "promotion-system":
@@ -99,7 +106,14 @@ export default function App() {
       case "senior-staff-guide":
         return <SeniorStaffGuide searchQuery={searchQuery} />;
       default:
-        return <Introduction navigate={navigate} searchQuery={searchQuery} />;
+        return (
+          <Introduction
+            navigate={navigate}
+            searchQuery={searchQuery}
+            logoSrc={customLogo}
+            onLogoUpload={handleLogoUpload}
+          />
+        );
     }
   };
 
