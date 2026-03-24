@@ -1,94 +1,368 @@
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
-import { CommandBlockIcon, DiscordIcon } from "../McIcons";
+import { CommandBlockIcon } from "../McIcons";
 
 interface Props {
   searchQuery: string;
 }
 
-interface Command {
-  cmd: string;
-  type: "ingame" | "discord";
+interface CommandCategory {
+  label: string;
+  icon: string;
+  commands: string[];
 }
 
 interface RankData {
   rank: string;
   shortRank: string;
   color: string;
-  glowColor: string;
-  commands: Command[];
-  inherits?: string[];
+  emoji: string;
+  categories: CommandCategory[];
   description: string;
-  duties: string[];
 }
 
 const rankGroups: RankData[] = [
   {
-    rank: "Helper",
-    shortRank: "HELPER",
-    color: "#00d4ff",
-    glowColor: "rgba(0,212,255,0.35)",
-    commands: [
-      { cmd: "/tempmute [user] duration reason", type: "ingame" },
-      { cmd: "?timeout user_id duration reason", type: "discord" },
-    ],
+    rank: "Manager",
+    shortRank: "MANAGER",
+    color: "#ffd700",
+    emoji: "👑",
     description:
-      "Helpers are responsible for moderating in-game chat and assisting moderators with player reports and bans.",
-    duties: [
-      "Moderate in-game chat",
-      "Mute rule breakers",
-      "Assist mods with reports and evidence",
-    ],
-  },
-  {
-    rank: "Mod",
-    shortRank: "MOD",
-    color: "#00ff88",
-    glowColor: "rgba(0,255,136,0.35)",
-    commands: [
-      { cmd: "/ban playername duration reason", type: "ingame" },
-      { cmd: "?ban playername duration reason", type: "discord" },
-    ],
-    description:
-      "Moderators are responsible for removing cheaters and enforcing server rules.",
-    duties: [
-      "Ban hackers and cheaters",
-      "Enforce punishments",
-      "Moderate server gameplay",
-    ],
-  },
-  {
-    rank: "Sr.Mod",
-    shortRank: "SR.MOD",
-    color: "#a855f7",
-    glowColor: "rgba(168,85,247,0.35)",
-    commands: [{ cmd: "/Axir view [playername]", type: "ingame" }],
-    inherits: ["Helper", "Mod"],
-    description:
-      "Senior Moderators mentor staff and assist admins in managing moderation.",
-    duties: [
-      "Mentor new staff members",
-      "Assist moderators with difficult cases",
-      "Help administrators manage staff",
+      "Highest staff rank with full server administration and permission management.",
+    categories: [
+      {
+        label: "Punishment",
+        icon: "🔨",
+        commands: [
+          "/ban - Ban player permanently",
+          "/tempban - Temporary ban",
+          "/unban - Unban player",
+          "/unban own - Remove your own ban",
+          "/mute - Mute player",
+          "/tempmute - Temporary mute",
+          "/unmute - Unmute player",
+          "/unmute own - Remove your own mute",
+          "/warn - Warn player",
+          "/unwarn - Remove warning",
+        ],
+      },
+      {
+        label: "Records",
+        icon: "📊",
+        commands: [
+          "/warnlist - View warnings",
+          "/banlist - View bans",
+          "/checkban - Check ban info",
+          "/checkmute - Check mute info",
+          "/checkwarn - Check warnings",
+          "/dupeip - Check alt accounts",
+        ],
+      },
+      {
+        label: "Utility",
+        icon: "🧰",
+        commands: [
+          "/endersee - View ender chest",
+          "/staffchat - Staff chat",
+          "/playtime - Check playtime",
+          "/selfplaytime - Your playtime",
+        ],
+      },
+      {
+        label: "Admin",
+        icon: "⚙️",
+        commands: [
+          "/vaultadmin - Vault admin panel",
+          "/lp group - Manage groups",
+          "/lp user parent set - Set rank",
+          "/lp user parent clear - Remove rank",
+          "/lp user clear - Reset permissions",
+          "/gmc /gms /gmsp /gma - Change gamemode",
+        ],
+      },
+      {
+        label: "Economy",
+        icon: "💰",
+        commands: [
+          "/shop /shops /sell /sell all /sell hand /sell hand all /sellmore",
+        ],
+      },
     ],
   },
   {
     rank: "Admin",
     shortRank: "ADMIN",
     color: "#f59e0b",
-    glowColor: "rgba(245,158,11,0.35)",
-    commands: [
-      { cmd: "/gmc", type: "ingame" },
-      { cmd: "/gmsp", type: "ingame" },
-      { cmd: "/gms", type: "ingame" },
-    ],
-    inherits: ["Helper", "Mod", "Sr.Mod"],
+    emoji: "🛡",
     description:
-      "Admins focus on server administration and assisting players, rather than basic punishments.",
-    duties: [
-      "Assist players with problems",
-      "Manage server situations",
-      "Support managers with administrative tasks",
+      "Server administrators with full moderation and admin panel access.",
+    categories: [
+      {
+        label: "Punishment",
+        icon: "🔨",
+        commands: [
+          "/ban /tempban /unban /unban own",
+          "/kick",
+          "/mute /tempmute /unmute /unmute own",
+          "/warn /unwarn",
+        ],
+      },
+      {
+        label: "Records",
+        icon: "📊",
+        commands: [
+          "/warnlist /banlist",
+          "/checkban /checkmute /checkwarn",
+          "/dupeip",
+        ],
+      },
+      {
+        label: "Utility",
+        icon: "🧰",
+        commands: [
+          "/endersee /endersee edit",
+          "/invsee",
+          "/vanish",
+          "/staffchat",
+          "/playtime /selfplaytime",
+        ],
+      },
+      {
+        label: "Admin",
+        icon: "⚙️",
+        commands: ["/vaultadmin", "/gmc /gms /gmsp /gma"],
+      },
+      {
+        label: "Economy",
+        icon: "💰",
+        commands: [
+          "/shop /shops /sell /sell all /sell hand /sell hand all /sellmore",
+        ],
+      },
+    ],
+  },
+  {
+    rank: "Senior Moderator",
+    shortRank: "SR. MOD",
+    color: "#a855f7",
+    emoji: "⚔",
+    description:
+      "Senior Moderators with extended moderation powers and vault access.",
+    categories: [
+      {
+        label: "Punishment",
+        icon: "🔨",
+        commands: [
+          "/tempban /unban /unban own",
+          "/mute /tempmute /unmute /unmute own",
+          "/warn",
+        ],
+      },
+      {
+        label: "Records",
+        icon: "📊",
+        commands: [
+          "/warnlist /banlist",
+          "/checkban /checkmute /checkwarn",
+          "/dupeip",
+        ],
+      },
+      {
+        label: "Utility",
+        icon: "🧰",
+        commands: ["/endersee", "/staffchat", "/playtime /selfplaytime"],
+      },
+      {
+        label: "Extra",
+        icon: "⚙️",
+        commands: [
+          "/vaultadmin",
+          "/fancyglow gui /fancyglow disable",
+          "/fastcrystals use /fastercrystals toggle",
+        ],
+      },
+      {
+        label: "Economy",
+        icon: "💰",
+        commands: [
+          "/shop /shops /sell /sell all /sell hand /sell hand all /sellmore",
+        ],
+      },
+    ],
+  },
+  {
+    rank: "Moderator",
+    shortRank: "MOD",
+    color: "#22c55e",
+    emoji: "🟢",
+    description:
+      "Moderators enforcing server rules with ban and mute permissions.",
+    categories: [
+      {
+        label: "Punishment",
+        icon: "🔨",
+        commands: [
+          "/ban /ipban /tempban /unban",
+          "/mute /tempmute /unmute",
+          "/warn",
+        ],
+      },
+      {
+        label: "Records",
+        icon: "📊",
+        commands: ["/warnlist /banlist", "/checkban /checkmute /checkwarn"],
+      },
+      {
+        label: "Utility",
+        icon: "🧰",
+        commands: ["/staffchat", "/playtime /selfplaytime"],
+      },
+      {
+        label: "Extra",
+        icon: "⚙️",
+        commands: [
+          "/fancyglow gui /fancyglow disable",
+          "/fastcrystals use /fastercrystals toggle",
+        ],
+      },
+      {
+        label: "Economy",
+        icon: "💰",
+        commands: [
+          "/shop /shops /sell /sell all /sell hand /sell hand all /sellmore",
+        ],
+      },
+    ],
+  },
+  {
+    rank: "Junior Moderator",
+    shortRank: "JR. MOD",
+    color: "#3b82f6",
+    emoji: "🔵",
+    description:
+      "Junior Moderators with foundational ban, mute, and kick access.",
+    categories: [
+      {
+        label: "Punishment",
+        icon: "🔨",
+        commands: [
+          "/ban /tempban /unban /kick",
+          "/mute /tempmute /unmute",
+          "/warn",
+        ],
+      },
+      {
+        label: "Records",
+        icon: "📊",
+        commands: [
+          "/warnlist /banlist",
+          "/checkban /checkmute /checkwarn",
+          "/dupeip",
+        ],
+      },
+      {
+        label: "Utility",
+        icon: "🧰",
+        commands: ["/warp", "/staffchat", "/playtime /selfplaytime"],
+      },
+      {
+        label: "Extra",
+        icon: "⚙️",
+        commands: ["/fancyglow gui /fancyglow disable"],
+      },
+      {
+        label: "Economy",
+        icon: "💰",
+        commands: [
+          "/shop /shops /sell /sell all /sell hand /sell hand all /sellmore",
+        ],
+      },
+    ],
+  },
+  {
+    rank: "Helper",
+    shortRank: "HELPER",
+    color: "#a78bfa",
+    emoji: "🟣",
+    description:
+      "Helpers supporting players and moderating chat with mute access.",
+    categories: [
+      {
+        label: "Utility",
+        icon: "🧰",
+        commands: ["/tpaccept /tpacancel /tpahere /tptoggle", "/warp"],
+      },
+      {
+        label: "Punishment",
+        icon: "🔨",
+        commands: ["/mute /tempmute", "/warn"],
+      },
+      {
+        label: "Records",
+        icon: "📊",
+        commands: ["/warnlist /checkmute /checkwarn /mutelist"],
+      },
+      {
+        label: "Economy",
+        icon: "💰",
+        commands: [
+          "/shop /shops /sell /sell all /sell hand /sell hand all /sellmore",
+        ],
+      },
+      {
+        label: "Extra",
+        icon: "⚙️",
+        commands: [
+          "/fancyglow gui /fancyglow disable",
+          "/staffchat",
+          "/playtime /selfplaytime",
+        ],
+      },
+    ],
+  },
+  {
+    rank: "Trainee",
+    shortRank: "TRAINEE",
+    color: "#67e8f9",
+    emoji: "🧪",
+    description:
+      "Trainees learning the ropes with basic mute, warn, and utility access.",
+    categories: [
+      {
+        label: "Utility",
+        icon: "🧰",
+        commands: [
+          "/spawn /sethome /renamehome",
+          "/tpa /tpaccept /tpacancel /tpahere /tptoggle",
+          "/warp /paytoggle",
+        ],
+      },
+      {
+        label: "Punishment",
+        icon: "🔨",
+        commands: ["/mute /tempmute", "/warn"],
+      },
+      {
+        label: "Records",
+        icon: "📊",
+        commands: ["/checkmute /checkwarn /banlist"],
+      },
+      {
+        label: "Economy",
+        icon: "💰",
+        commands: [
+          "/shop /shops /sell /sell all /sell hand /sell hand all /sellmore",
+        ],
+      },
+      {
+        label: "Extra",
+        icon: "⚙️",
+        commands: [
+          "/fancyglow gui /fancyglow disable",
+          "/staffchat",
+          "/playtime /selfplaytime",
+        ],
+      },
     ],
   },
 ];
@@ -98,423 +372,219 @@ function CopyButton({
   accentColor,
 }: { cmd: string; accentColor: string }) {
   const [copied, setCopied] = useState(false);
-
   const handleCopy = () => {
-    navigator.clipboard.writeText(cmd);
+    navigator.clipboard.writeText(cmd.split(" - ")[0]);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
   return (
     <button
       type="button"
-      data-ocid="commands.copy_button"
       onClick={handleCopy}
-      title={copied ? "Copied!" : "Copy command"}
+      title={copied ? "Copied!" : "Copy"}
       style={{
         background: copied ? `${accentColor}22` : "rgba(255,255,255,0.05)",
-        color: copied ? accentColor : "rgba(255,255,255,0.45)",
+        color: copied ? accentColor : "rgba(255,255,255,0.4)",
         border: `1px solid ${copied ? `${accentColor}55` : "rgba(255,255,255,0.08)"}`,
-        borderRadius: "6px",
-        padding: "4px 10px",
-        fontSize: "11px",
+        borderRadius: "5px",
+        padding: "3px 8px",
+        fontSize: "10px",
         display: "flex",
         alignItems: "center",
-        gap: "4px",
+        gap: "3px",
         cursor: "pointer",
         transition: "all 0.2s",
         whiteSpace: "nowrap",
         flexShrink: 0,
       }}
     >
-      {copied ? <Check size={11} /> : <Copy size={11} />}
-      {copied ? "Copied!" : "Copy"}
+      {copied ? <Check size={10} /> : <Copy size={10} />}
+      {copied ? "Copied" : "Copy"}
     </button>
   );
 }
 
-function InGameIcon() {
+function CategoryBlock({
+  cat,
+  color,
+}: { cat: CommandCategory; color: string }) {
   return (
-    <svg
-      width="13"
-      height="13"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="3" width="18" height="18" rx="2" />
-      <path d="M8 9l-2 3 2 3" />
-      <path d="M16 9l2 3-2 3" />
-      <path d="M13 7l-2 10" />
-    </svg>
-  );
-}
-
-function RankIcon({ rank }: { rank: string }) {
-  if (rank === "Helper") {
-    return (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        aria-hidden="true"
+    <div style={{ marginBottom: "10px" }}>
+      <div
+        style={{
+          fontSize: "10px",
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: color,
+          opacity: 0.75,
+          marginBottom: "5px",
+          display: "flex",
+          alignItems: "center",
+          gap: "5px",
+        }}
       >
-        <path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11 4.5-.85 8-5.75 8-11V6l-8-4z" />
-        <path d="M9 12l2 2 4-4" />
-      </svg>
-    );
-  }
-  if (rank === "Mod") {
-    return (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        aria-hidden="true"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-      </svg>
-    );
-  }
-  if (rank === "Sr.Mod") {
-    return (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        aria-hidden="true"
-      >
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
-    );
-  }
-  // Admin
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      aria-hidden="true"
-    >
-      <path d="M2 18h20" />
-      <path d="M4 18L2 8l5 4 5-7 5 7 5-4-2 10H4z" />
-    </svg>
+        <span aria-hidden="true">{cat.icon}</span>
+        {cat.label}
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+        {cat.commands.map((cmd) => {
+          const [cmdPart, descPart] = cmd.includes(" - ")
+            ? cmd.split(/ - (.+)/)
+            : [cmd, ""];
+          return (
+            <div
+              key={cmd}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                background: "rgba(0,0,0,0.3)",
+                border: `1px solid ${color}15`,
+                borderRadius: "7px",
+                padding: "6px 10px",
+              }}
+            >
+              <code
+                style={{
+                  fontFamily: "'Fira Code', 'Cascadia Code', monospace",
+                  fontSize: "12px",
+                  color: color,
+                  flex: 1,
+                  lineHeight: "1.4",
+                }}
+              >
+                {cmdPart}
+                {descPart && (
+                  <span
+                    style={{
+                      color: "rgba(255,255,255,0.38)",
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: "11px",
+                      marginLeft: "6px",
+                    }}
+                  >
+                    — {descPart}
+                  </span>
+                )}
+              </code>
+              <CopyButton cmd={cmdPart} accentColor={color} />
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
 function RankCard({ group }: { group: RankData }) {
-  const isDiscord = (cmd: Command) => cmd.type === "discord";
-
+  const [open, setOpen] = useState(true);
   return (
     <div
-      data-ocid={`commands.${group.shortRank.toLowerCase().replace(".", "")}.card`}
       style={{
-        background: "rgba(20,20,28,0.85)",
-        border: `1px solid ${group.color}35`,
+        background: "rgba(20,20,28,0.9)",
+        border: `1px solid ${group.color}30`,
         borderRadius: "16px",
         overflow: "hidden",
-        boxShadow: `0 0 0 1px ${group.color}10, 0 8px 32px ${group.color}12, 0 2px 8px rgba(0,0,0,0.4)`,
+        boxShadow: `0 0 0 1px ${group.color}10, 0 8px 32px ${group.color}10`,
         backdropFilter: "blur(12px)",
         transition: "box-shadow 0.3s, transform 0.3s",
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLDivElement).style.boxShadow =
-          `0 0 0 1px ${group.color}55, 0 12px 40px ${group.color}28, 0 2px 8px rgba(0,0,0,0.5)`;
+          `0 0 0 1px ${group.color}45, 0 12px 40px ${group.color}22`;
         (e.currentTarget as HTMLDivElement).style.transform =
           "translateY(-2px)";
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLDivElement).style.boxShadow =
-          `0 0 0 1px ${group.color}10, 0 8px 32px ${group.color}12, 0 2px 8px rgba(0,0,0,0.4)`;
+          `0 0 0 1px ${group.color}10, 0 8px 32px ${group.color}10`;
         (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
       }}
     >
-      {/* Card Header */}
-      <div
+      {/* Header */}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
         style={{
-          background: `linear-gradient(135deg, ${group.color}18 0%, transparent 60%)`,
-          borderBottom: `1px solid ${group.color}22`,
-          padding: "18px 22px",
+          width: "100%",
+          background: `linear-gradient(135deg, ${group.color}14 0%, transparent 60%)`,
+          borderBottom: open ? `1px solid ${group.color}20` : "none",
+          padding: "16px 20px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: "12px",
+          cursor: "pointer",
+          border: "none",
+          textAlign: "left",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <span
             style={{
-              width: "40px",
-              height: "40px",
+              width: "38px",
+              height: "38px",
               borderRadius: "10px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               background: `${group.color}18`,
               color: group.color,
-              boxShadow: `0 0 12px ${group.color}40`,
+              boxShadow: `0 0 14px ${group.color}35`,
               border: `1px solid ${group.color}30`,
+              fontSize: "18px",
               flexShrink: 0,
             }}
+            aria-hidden="true"
           >
-            <RankIcon rank={group.rank} />
+            {group.emoji}
           </span>
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "17px",
-                  color: group.color,
-                  letterSpacing: "0.04em",
-                  textShadow: `0 0 12px ${group.color}60`,
-                }}
-              >
-                {group.shortRank}
-              </span>
-              <span
-                style={{
-                  fontSize: "11px",
-                  padding: "2px 8px",
-                  borderRadius: "20px",
-                  background: `${group.color}18`,
-                  color: group.color,
-                  border: `1px solid ${group.color}35`,
-                  fontWeight: 600,
-                  letterSpacing: "0.06em",
-                }}
-              >
-                PERMISSIONS
-              </span>
+            <div
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 700,
+                fontSize: "16px",
+                color: group.color,
+                letterSpacing: "0.05em",
+                textShadow: `0 0 12px ${group.color}55`,
+              }}
+            >
+              {group.shortRank}
             </div>
-            {group.inherits && (
-              <div
-                style={{
-                  fontSize: "11px",
-                  color: "rgba(255,255,255,0.45)",
-                  marginTop: "2px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
-                }}
-              >
-                <span>Inherits:</span>
-                {group.inherits.map((r) => (
-                  <span
-                    key={r}
-                    style={{
-                      padding: "1px 6px",
-                      borderRadius: "4px",
-                      background: "rgba(255,255,255,0.06)",
-                      color: "rgba(255,255,255,0.6)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      fontSize: "10px",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {r}
-                  </span>
-                ))}
-              </div>
-            )}
+            <div
+              style={{
+                fontSize: "11px",
+                color: "rgba(255,255,255,0.4)",
+                marginTop: "1px",
+              }}
+            >
+              {group.description}
+            </div>
           </div>
         </div>
-      </div>
+        <span
+          style={{
+            color: group.color,
+            opacity: 0.6,
+            fontSize: "16px",
+            transition: "transform 0.2s",
+            transform: open ? "rotate(0deg)" : "rotate(-90deg)",
+            flexShrink: 0,
+          }}
+        >
+          ▾
+        </span>
+      </button>
 
-      <div
-        style={{
-          padding: "18px 22px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "18px",
-        }}
-      >
-        {/* Commands */}
-        <div>
-          <div
-            style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              color: "rgba(255,255,255,0.35)",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
-            <CommandBlockIcon
-              size={12}
-              style={{ color: group.color, opacity: 0.8 }}
-            />
-            Commands
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {group.commands.map((c) => (
-              <div
-                key={c.cmd}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  background: isDiscord(c)
-                    ? "rgba(88,101,242,0.1)"
-                    : "rgba(0,0,0,0.35)",
-                  border: isDiscord(c)
-                    ? "1px solid rgba(88,101,242,0.3)"
-                    : `1px solid ${group.color}18`,
-                  borderRadius: "8px",
-                  padding: "8px 12px",
-                }}
-              >
-                <span
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
-                    fontSize: "10px",
-                    fontWeight: 600,
-                    letterSpacing: "0.04em",
-                    padding: "2px 7px",
-                    borderRadius: "4px",
-                    flexShrink: 0,
-                    background: isDiscord(c)
-                      ? "rgba(88,101,242,0.18)"
-                      : `${group.color}15`,
-                    color: isDiscord(c) ? "#7289da" : group.color,
-                    border: isDiscord(c)
-                      ? "1px solid rgba(88,101,242,0.3)"
-                      : `1px solid ${group.color}30`,
-                  }}
-                >
-                  {isDiscord(c) ? (
-                    <>
-                      <DiscordIcon size={10} />
-                      Discord
-                    </>
-                  ) : (
-                    <>
-                      <InGameIcon />
-                      In-Game
-                    </>
-                  )}
-                </span>
-                <code
-                  style={{
-                    fontFamily: "'Fira Code', 'Cascadia Code', monospace",
-                    fontSize: "12.5px",
-                    color: isDiscord(c) ? "#a8b4ff" : group.color,
-                    flex: 1,
-                    letterSpacing: "0.01em",
-                  }}
-                >
-                  {c.cmd}
-                </code>
-                <CopyButton
-                  cmd={c.cmd}
-                  accentColor={isDiscord(c) ? "#7289da" : group.color}
-                />
-              </div>
-            ))}
-          </div>
+      {/* Body */}
+      {open && (
+        <div style={{ padding: "16px 20px" }}>
+          {group.categories.map((cat) => (
+            <CategoryBlock key={cat.label} cat={cat} color={group.color} />
+          ))}
         </div>
-
-        {/* Description */}
-        <div>
-          <div
-            style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              color: "rgba(255,255,255,0.35)",
-              textTransform: "uppercase",
-              marginBottom: "6px",
-            }}
-          >
-            Description
-          </div>
-          <p
-            style={{
-              fontSize: "13px",
-              color: "rgba(255,255,255,0.65)",
-              lineHeight: "1.6",
-              margin: 0,
-            }}
-          >
-            {group.description}
-          </p>
-        </div>
-
-        {/* Duties */}
-        <div>
-          <div
-            style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              color: "rgba(255,255,255,0.35)",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
-            Main Duties
-          </div>
-          <ul
-            style={{
-              margin: 0,
-              padding: 0,
-              listStyle: "none",
-              display: "flex",
-              flexDirection: "column",
-              gap: "5px",
-            }}
-          >
-            {group.duties.map((duty) => (
-              <li
-                key={duty}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  fontSize: "13px",
-                  color: "rgba(255,255,255,0.6)",
-                }}
-              >
-                <span
-                  style={{
-                    width: "5px",
-                    height: "5px",
-                    borderRadius: "50%",
-                    background: group.color,
-                    boxShadow: `0 0 4px ${group.color}`,
-                    flexShrink: 0,
-                  }}
-                />
-                {duty}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -524,11 +594,13 @@ export default function StaffCommands({ searchQuery }: Props) {
     (g) =>
       !searchQuery ||
       g.rank.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      g.shortRank.toLowerCase().includes(searchQuery.toLowerCase()) ||
       g.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      g.commands.some((c) =>
-        c.cmd.toLowerCase().includes(searchQuery.toLowerCase()),
-      ) ||
-      g.duties.some((d) => d.toLowerCase().includes(searchQuery.toLowerCase())),
+      g.categories.some((cat) =>
+        cat.commands.some((c) =>
+          c.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+      ),
   );
 
   return (
@@ -564,19 +636,13 @@ export default function StaffCommands({ searchQuery }: Props) {
             color: "rgba(255,255,255,0.45)",
           }}
         >
-          Official staff permissions approved by management. Each rank grants
-          unique commands and inherits from lower ranks.
+          Official command permissions for each staff rank. Click a rank card to
+          expand or collapse its commands.
         </p>
       </div>
 
-      {/* Rank cards grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: "16px",
-        }}
-      >
+      {/* Rank cards */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
         {filtered.map((group) => (
           <RankCard key={group.rank} group={group} />
         ))}
@@ -584,7 +650,6 @@ export default function StaffCommands({ searchQuery }: Props) {
 
       {filtered.length === 0 && (
         <div
-          data-ocid="commands.empty_state"
           style={{
             textAlign: "center",
             padding: "48px 24px",
